@@ -1,4 +1,4 @@
-import { IApi, IgetProducts, IOrder, IOrderErr, IProduct } from "../../../types";
+import { IApi, IgetProducts, IProduct, ISuccessOrder, IpostProducts } from "../../../types";
 
 export class ComApi {
   protected api: IApi;
@@ -27,7 +27,7 @@ export class ComApi {
     }
   }
 
-  public async post(uri: string = '/order/', data: object = {}): Promise<IOrder | IOrderErr> {
+  public async post(uri: string = '/order/', data: IpostProducts | {} = {}): Promise<ISuccessOrder> {
     return await this.api.post(uri, data);
   }
 }

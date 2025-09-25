@@ -10,3 +10,12 @@ export const settings = {
 
 };
 
+export const compareCategory = new Map([
+    ['другое', 'other'],
+    ['софт-скил', 'soft'],
+    ['дополнительное', 'additional'],
+    ['хард-скил', 'hard'],
+    ['кнопка', 'button'],
+    ['unknown', 'unknown']
+  ])
+

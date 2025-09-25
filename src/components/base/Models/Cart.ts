@@ -1,22 +1,24 @@
 import { IProduct } from "../../../types";
+import { IEvents } from "../Events";
 
 export class Cart {
-  protected cartItems: Set<IProduct>;
+  protected cartItems: Set<IProduct> = new Set();
 
-  constructor() {
-    this.cartItems = new Set();
-  }
+  constructor(protected events: IEvents) { }
 
   public addProduct(product: IProduct): void {
     this.cartItems.add(product);
+    this.events.emit('cart:changed');
   }
 
   public deleteProduct(product: IProduct): void {
     this.cartItems.delete(product);
+    this.events.emit('cart:changed');
   }
 
   public clearCart(): void {
     this.cartItems.clear();
+    this.events.emit('cart:changed');
   }
 
   public getQuantityCartItems(): number {

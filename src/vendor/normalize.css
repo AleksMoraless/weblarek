@@ -347,3 +347,8 @@ template {
 [hidden] {
   display: none;
 }
+
+button,
+a {
+  cursor: pointer;
+}

@@ -1,13 +1,11 @@
 import { IProduct } from "../../../types";
+import { IEvents } from "../Events";
 
 export class Catalog {
-  protected products: IProduct[]
-  protected pickedProduct: null | IProduct
+  protected products: IProduct[] = []
+  protected pickedProduct: null | IProduct = null
 
-  constructor() {
-    this.products = []
-    this.pickedProduct = null
-  }
+  constructor(protected events: IEvents) { }
 
   public getProducts(): IProduct[] {
     return this.products;
@@ -15,6 +13,7 @@ export class Catalog {
 
   public setProducts(products: IProduct[]): void {
     this.products = products;
+    this.events.emit('products:changed');
   }
 
   public getProductByID(id: string): IProduct | null {
@@ -25,7 +24,8 @@ export class Catalog {
     return this.pickedProduct;
   }
 
-  public setPickedProduct(product: IProduct): void {
-    this.pickedProduct = product;
+  public setPickedProduct(id: string): void {
+    this.pickedProduct = this.getProductByID(id) ?? null;
+    this.events.emit('product:setted');
   }
 }
