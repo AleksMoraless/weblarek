@@ -1,4 +1,5 @@
 import { IProduct } from "../../../types";
+import { eventsList } from "../../../utils/constants";
 import { IEvents } from "../Events";
 
 export class Cart {
@@ -8,17 +9,17 @@ export class Cart {
 
   public addProduct(product: IProduct): void {
     this.cartItems.add(product);
-    this.events.emit('cart:changed');
+    this.events.emit(eventsList["cart:changed"]);
   }
 
   public deleteProduct(product: IProduct): void {
     this.cartItems.delete(product);
-    this.events.emit('cart:changed');
+    this.events.emit(eventsList["cart:changed"]);
   }
 
   public clearCart(): void {
     this.cartItems.clear();
-    this.events.emit('cart:changed');
+    this.events.emit(eventsList["cart:changed"]);
   }
 
   public getQuantityCartItems(): number {

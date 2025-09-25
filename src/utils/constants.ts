@@ -6,9 +6,7 @@ export const API_URL = `${import.meta.env.VITE_API_ORIGIN}/api/weblarek`;
 которое хранится в объекте товара. */
 export const CDN_URL = `${import.meta.env.VITE_API_ORIGIN}/content/weblarek`;
 
-export const settings = {
-
-};
+export const settings = {};
 
 export const compareCategory = new Map([
     ['другое', 'other'],
@@ -18,4 +16,26 @@ export const compareCategory = new Map([
     ['кнопка', 'button'],
     ['unknown', 'unknown']
   ])
+
+  export enum eventsList {
+    'products:changed' = 'products:changed',
+    'product:setted' = 'product:setted',
+    'cart:changed' = 'cart:changed',
+    'payMethod:added' = 'payMethod:added',
+    'product:deleteToCart' = 'product:deleteToCart',
+    'product:selected' = 'product:selected',
+    'modal:noScroll' = 'modal:noScroll',
+    'product:actionWithCart' = 'product:actionWithCart',
+    'form:order' = 'form:order',
+    'email:added' = 'email:added',
+    'phone:added' = 'phone:added',
+    'address:added' = 'address:added',
+    'contacts:checkData' = 'contacts:checkData',
+    'contacts:submit' = 'contacts:submit',
+    'payMethod:chosen' = 'payMethod:chosen',
+    'order:checkData' = 'order:checkData',
+    'order:submit' = 'order:submit',
+    'cart:opened' = 'cart:opened',
+    'modal:closed' = 'modal:closed',
+  }
 

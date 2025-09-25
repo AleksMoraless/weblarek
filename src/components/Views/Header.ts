@@ -1,3 +1,4 @@
+import { eventsList } from "../../utils/constants";
 import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { EventEmitter } from "../base/Events";
@@ -17,8 +18,8 @@ export class Header extends Component<IHeaderData> {
 
 
     this.cartButton.addEventListener('click', () => {
-      this.events.emit('cart:opened');
-      this.events.emit('modal:noScroll');
+      this.events.emit(eventsList["cart:opened"]);
+      this.events.emit(eventsList["modal:noScroll"]);
     });
   }
 

@@ -1,3 +1,4 @@
+import { eventsList } from "../../utils/constants";
 import { ensureElement } from "../../utils/utils";
 import { EventEmitter } from "../base/Events";
 import { Card } from "./Card";
@@ -16,7 +17,7 @@ export class CardCart extends Card {
     this.setText(this.indexElement, index);
 
     this.cardButtonDelete.addEventListener('click', () => {
-      this.events.emit('product:deleteToCart', { id: this.productId })
+      this.events.emit(eventsList["product:deleteToCart"], { id: this.productId })
     })
   }
 

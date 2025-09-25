@@ -1,4 +1,5 @@
 import { IProduct } from "../../../types";
+import { eventsList } from "../../../utils/constants";
 import { IEvents } from "../Events";
 
 export class Catalog {
@@ -13,7 +14,7 @@ export class Catalog {
 
   public setProducts(products: IProduct[]): void {
     this.products = products;
-    this.events.emit('products:changed');
+    this.events.emit(eventsList["products:changed"]);
   }
 
   public getProductByID(id: string): IProduct | null {

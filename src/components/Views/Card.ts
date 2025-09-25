@@ -28,5 +28,4 @@ export class Card extends Component<IProduct | IProductCart> {
       this.setText(this.cardPrice, `${value} синапсов`) :
       this.setText(this.cardPrice, 'Бесценно');
   }
-
 }

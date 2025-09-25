@@ -3,7 +3,7 @@ import './scss/styles.scss';
 import { Api } from "./components/base/Api";
 import { ComApi } from "./components/base/comApi/comApi";
 import { Catalog } from "./components/base/Models/Catalog";
-import { API_URL } from "./utils/constants";
+import { API_URL, eventsList } from "./utils/constants";
 import { EventEmitter } from './components/base/Events.ts';
 import { Header } from './components/Views/Header.ts';
 import { cloneTemplate } from './utils/utils.ts';
@@ -44,13 +44,13 @@ const order = new FormOrder(cloneTemplate(orderTemplate), events);
 const contacts = new FormContacts(cloneTemplate(contactsTemplate), events);
 const successOrder = new SuccessOrder(cloneTemplate(successOrderTemplate), events);
 
-comApi.get('/product/')
+comApi.get()
   .then(res => {
     res.map(item => item.image = item.image.slice(1, -3) + 'png')
     catalog.setProducts(res);
-  })
+  }).catch(err => console.error(err))
 
-events.on('products:changed', () => {
+events.on(eventsList['products:changed'], () => {
   const productsHTMLArray = catalog.getProducts().map(item => {
     return new CardCatalog(cloneTemplate(cardTemplate), events).render(item)
   })
@@ -59,11 +59,11 @@ events.on('products:changed', () => {
   })
 })
 
-events.on('product:selected', ({ id }: { id: string }) => {
+events.on(eventsList['product:selected'], ({ id }: { id: string }) => {
   catalog.setPickedProduct(id);
 })
 
-events.on('product:setted', () => {
+events.on(eventsList['product:setted'], () => {
   const inCart = cart.cartHasProduct(catalog.getPickedProduct()!);
 
   modal.render({
@@ -73,11 +73,11 @@ events.on('product:setted', () => {
   })
 })
 
-events.on('modal:noScroll', () => {
+events.on(eventsList['modal:noScroll'], () => {
   document.body.style.overflow = 'hidden';
 })
 
-events.on('modal:closed', () => {
+events.on(eventsList['modal:closed'], () => {
   document.body.style.overflow = 'auto';
   catalog.setPickedProduct('');
   modal.render({
@@ -87,7 +87,7 @@ events.on('modal:closed', () => {
   })
 })
 
-events.on('cart:opened', () => {
+events.on(eventsList['cart:opened'], () => {
   if (cart.getQuantityCartItems() === 0) {
     modal.render({
       content: cartView.render({
@@ -113,7 +113,7 @@ events.on('cart:opened', () => {
   cartView.setTotalPrice(cart.getTotalPrice());
 })
 
-events.on('product:actionWithCart', ({ id }: { id: string }) => {
+events.on(eventsList['product:actionWithCart'], ({ id }: { id: string }) => {
   if (cart.cartHasProduct(catalog.getProductByID(id)!)) {
     cart.deleteProduct(catalog.getProductByID(id)!)
   } else {
@@ -121,15 +121,15 @@ events.on('product:actionWithCart', ({ id }: { id: string }) => {
   }
 })
 
-events.on('product:addToCart', ({ id }: { id: string }) => {
-  cart.addProduct(catalog.getProductByID(id)!)
-})
+// events.on(eventsList.prod'product:addToCart', ({ id }: { id: string }) => {
+//   cart.addProduct(catalog.getProductByID(id)!)
+// })
 
-events.on('product:deleteToCart', ({ id }: { id: string }) => {
+events.on(eventsList['product:deleteToCart'], ({ id }: { id: string }) => {
   cart.deleteProduct(catalog.getProductByID(id)!)
 })
 
-events.on('cart:changed', () => {
+events.on(eventsList['cart:changed'], () => {
   if (cart.getQuantityCartItems() === 0) {
     cartView.render({
       elementsList: [cartView.getPlacer()]
@@ -160,7 +160,7 @@ events.on('cart:changed', () => {
   })
 })
 
-events.on('form:order', () => {
+events.on(eventsList['form:order'], () => {
   modal.render({
     content: order.render(),
     isOpen: true,
@@ -168,33 +168,33 @@ events.on('form:order', () => {
   })
 })
 
-events.on('payMethod:chosen', ({ name }: { name: 'cash' | 'card' | '' }) => {
+events.on(eventsList['payMethod:chosen'], ({ name }: { name: 'cash' | 'card' | '' }) => {
   buyer.setPayment(name)
 })
 
-events.on('payMethod:added', ({ name }: { name: 'cash' | 'card' | '' }) => {
+events.on(eventsList['payMethod:added'], ({ name }: { name: 'cash' | 'card' | '' }) => {
   order.setActivePayMethod(name);
 })
 
-events.on('address:added', ({ value }: { value: string }) => {
+events.on(eventsList['address:added'], ({ value }: { value: string }) => {
   buyer.setAddress(value);
 })
 
-events.on('order:checkData', () => {
+events.on(eventsList['order:checkData'], () => {
   order.setError('')
 
   if (!buyer.getData('payment')) {
     order.setError('Необходимо выбрать способ оплаты')
-    order.setformButtonNextEnable(false)
+    order.disableFormButton(false)
   } else if (!buyer.getData('address')) {
     order.setError('Необходимо указать адрес')
-    order.setformButtonNextEnable(false)
+    order.disableFormButton(false)
   } else {
-    order.setformButtonNextEnable(true)
+    order.disableFormButton(true)
   }
 })
 
-events.on('form:contacts', () => {
+events.on(eventsList['order:submit'], () => {
   modal.render({
     content: contacts.render(),
     isOpen: true,
@@ -202,29 +202,29 @@ events.on('form:contacts', () => {
   })
 })
 
-events.on('email:added', ({ value }: { value: string }) => {
+events.on(eventsList['email:added'], ({ value }: { value: string }) => {
   buyer.setEmail(value);
 })
 
-events.on('phone:added', ({ value }: { value: string }) => {
+events.on(eventsList['phone:added'], ({ value }: { value: string }) => {
   buyer.setPhone(value);
 })
 
-events.on('contacts:checkData', () => {
+events.on(eventsList['contacts:checkData'], () => {
   contacts.setError('')
 
   if (!buyer.getData('email')) {
     contacts.setError('Необходимо указать email')
-    contacts.setformButtonBuyEnable(false)
+    contacts.disableFormButton(false)
   } else if (!buyer.getData('phone')) {
     contacts.setError('Необходимо указать телефон')
-    contacts.setformButtonBuyEnable(false)
+    contacts.disableFormButton(false)
   } else {
-    contacts.setformButtonBuyEnable(true)
+    contacts.disableFormButton(true)
   }
 })
 
-events.on('order:success', () => {
+events.on(eventsList['contacts:submit'], () => {
   comApi.post('/order/', {
     ...buyer.getData() as IBuyer,
     total: cart.getTotalPrice(),

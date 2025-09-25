@@ -1,4 +1,5 @@
 import { IBuyer, IErrors } from "../../../types";
+import { eventsList } from "../../../utils/constants";
 import { IEvents } from "../Events";
 
 export class Buyer {
@@ -42,7 +43,7 @@ export class Buyer {
 
   public setPayment(value: 'cash' | 'card' | ''): void {
     this.buyerData.payment = value;
-    this.events.emit('payMethod:added', { name: value })
+    this.events.emit(eventsList["payMethod:added"], { name: value })
   }
 
   public setAddress(value: string): void {

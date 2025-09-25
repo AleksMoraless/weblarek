@@ -1,4 +1,5 @@
 import { IElementsList } from "../../types";
+import { eventsList } from "../../utils/constants";
 import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { EventEmitter } from "../base/Events";
@@ -18,12 +19,12 @@ export class CartView extends Component<IElementsList> {
     this.cartContainer = ensureElement('.basket__list', this.container);
 
     this.placer = document.createElement('p');
-    this.placer.textContent = 'Корзина пуста';
+    this.setText(this.placer, 'Корзина пуста')
     this.placer.style.opacity = 30 + '%';
     this.placer.style.fontSize = 30 + 'px';
 
     this.cartButtonOrder.addEventListener('click', () => {
-      this.events.emit('form:order');
+      this.events.emit(eventsList["form:order"]);
     })
   }
 
@@ -32,11 +33,7 @@ export class CartView extends Component<IElementsList> {
   }
 
   setDisableCartButtonOrder(value: boolean): void {
-    if (value) {
-      this.cartButtonOrder.disabled = true;
-    } else {
-      this.cartButtonOrder.disabled = false;
-    }
+    this.cartButtonOrder.disabled = value;
   }
 
   getPlacer(): HTMLElement {

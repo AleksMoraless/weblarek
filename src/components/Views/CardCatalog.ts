@@ -1,4 +1,4 @@
-import { CDN_URL, compareCategory } from "../../utils/constants";
+import { CDN_URL, compareCategory, eventsList } from "../../utils/constants";
 import { ensureElement } from "../../utils/utils";
 import { EventEmitter } from "../base/Events";
 import { Card } from "./Card";
@@ -13,8 +13,8 @@ export class CardCatalog extends Card {
     this.cardImage = ensureElement('.card__image', this.container) as HTMLImageElement;
 
     this.container.addEventListener('click', () => {
-      this.events.emit('product:selected', { id: this.productId })
-      this.events.emit('modal:noScroll');
+      this.events.emit(eventsList["product:selected"], { id: this.productId })
+      this.events.emit(eventsList["modal:noScroll"]);
     })
   }
 
